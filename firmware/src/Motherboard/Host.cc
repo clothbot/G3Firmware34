@@ -26,6 +26,7 @@
 #include "Version.hh"
 #include <util/atomic.h>
 #include <avr/eeprom.h>
+#define __PROG_TYPES_COMPAT__
 #include <avr/pgmspace.h>
 #include "Main.hh"
 #include "Errors.hh"
