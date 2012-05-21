@@ -16,6 +16,7 @@
 
 #include "Menu.hh"
 #include "Configuration.hh"
+#include "locale/language.hh"
 
 // TODO: Kill this, should be hanlded by build system.
 #ifdef HAS_INTERFACE_BOARD
@@ -407,9 +408,9 @@ void UserViewMenu::resetState()
 
 void UserViewMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
 {
-    const static PROGMEM prog_uchar msg[]  = "X/Y Direction:";
-    const static PROGMEM prog_uchar model[]= "Model View";
-    const static PROGMEM prog_uchar user[] = "User View";
+    const static PROGMEM prog_uchar msg[]  = __MENU_UVM_DRAWITEM_MSG__;
+    const static PROGMEM prog_uchar model[]= __MENU_UVM_DRAWITEM_MODEL__;
+    const static PROGMEM prog_uchar user[] = __MENU_UVM_DRAWITEM_USER__;
 
     switch (index)
     {

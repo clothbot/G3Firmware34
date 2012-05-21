@@ -39,6 +39,7 @@ import re
 from os.path import dirname
 # Parameters
 platform = ARGUMENTS.get('platform','mb24')
+language = ARGUMENTS.get('language','ENGLISH')
 # fived only applicable for rrmbv12
 fived = ARGUMENTS.get('fived','false')
 f_cpu='16000000L'
@@ -107,6 +108,7 @@ flags=[
 	'-DF_CPU='+str(f_cpu),
 	'-DVERSION='+str(version),
 	'-DSVN_VERSION='+str(svn_version),
+	'-DLANGUAGE='+str(language),
 	'-mmcu='+mcu,
 	'-g',
 	'-Os',
