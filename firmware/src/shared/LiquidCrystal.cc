@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#define __DELAY_BACKWARD_COMPATIBLE__
 #include <util/delay.h>
 #include <avr/eeprom.h>
 #include <avr/interrupt.h>

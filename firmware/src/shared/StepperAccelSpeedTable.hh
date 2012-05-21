@@ -2,6 +2,7 @@
 #define STEPPERACCELSPEEDTABLE_HH
 
 #include <inttypes.h>
+#define __PROG_TYPES_COMPAT__
 #include <avr/pgmspace.h>
 
 const uint16_t speed_lookuptable_fast[256][2] PROGMEM = {\

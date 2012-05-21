@@ -20,6 +20,7 @@
 #include "EepromMap.hh"
 #include <avr/eeprom.h>
 #include <stdint.h>
+#define __PROG_TYPES_COMPAT__
 #include <avr/pgmspace.h>
 
 

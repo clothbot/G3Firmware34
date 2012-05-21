@@ -4,6 +4,7 @@
 // TODO: Proper attribution
 
 #include <stdint.h>
+#define __PROG_TYPES_COMPAT__
 #include <avr/pgmspace.h>
 #include "Pin.hh"
 

@@ -21,6 +21,7 @@
 #define MOODLIGHTCONTROLLER_HH_
 
 #include "BlinkMMaxM.hh"
+#define __PROG_TYPES_COMPAT__
 #include <avr/pgmspace.h>
 
 
