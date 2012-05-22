@@ -96,7 +96,7 @@ public:
 
     void writeString(char message[]);
 
-    void writeFromPgmspace(const prog_uchar message[]);
+    void writeFromPgmspace(const unsigned char PROGMEM  message[]);
 
     void command(uint8_t);
 

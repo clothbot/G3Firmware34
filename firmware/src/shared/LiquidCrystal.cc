@@ -258,7 +258,8 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize)
 void LiquidCrystal::clear()
 {
     command(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
-    _delay_us(_clearDelay);  // this command takes a long time!
+   for (int i = 0; i < _clearDelay; i++) 
+      { _delay_us(1); } 
 }
 
 void LiquidCrystal::home()
@@ -483,7 +484,7 @@ void LiquidCrystal::writeFloat(float value, uint8_t decimalPlaces)
 
 void LiquidCrystal::writeFixedPoint(int64_t value, uint8_t padding, uint8_t precision)
 {
-    const static PROGMEM prog_uchar overflow[]  = "overflow";
+    const static unsigned char PROGMEM overflow[]  = "overflow";
 
     int64_t divisor = 1;
     for (uint8_t i = 0; i < (padding + precision); i ++ )
@@ -517,7 +518,7 @@ void LiquidCrystal::writeString(char message[])
     }
 }
 
-void LiquidCrystal::writeFromPgmspace(const prog_uchar message[])
+void LiquidCrystal::writeFromPgmspace(const unsigned char PROGMEM message[])
 {
     char letter;
     while (letter = pgm_read_byte(message++))

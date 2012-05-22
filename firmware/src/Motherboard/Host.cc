@@ -646,7 +646,7 @@ char* getMachineName()
     }
 
     // If it's still zero, load in a default.
-    const static PROGMEM prog_uchar defaultMachineName[] =  "Thing-O-Matic";
+    const static unsigned char PROGMEM defaultMachineName[] =  "Thing-O-Matic";
 
     if (machineName[0] == 0)
     {

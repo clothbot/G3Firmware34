@@ -61,58 +61,58 @@ bool MoodLightController::start()
 
 //There has to be a better way, however PROGMEM precludes it
 
-const static PROGMEM prog_uchar script0 [] = "Bot Status";
-const static PROGMEM prog_uchar script1 [] = "Custom RGB";
-const static PROGMEM prog_uchar script2 [] = "Off";
-const static PROGMEM prog_uchar script3 [] = "White";
-const static PROGMEM prog_uchar script4 [] = "Red";
-const static PROGMEM prog_uchar script5 [] = "Green";
-const static PROGMEM prog_uchar script6 [] = "Blue";
-const static PROGMEM prog_uchar script7 [] = "Cyan";
-const static PROGMEM prog_uchar script8 [] = "Magenta";
-const static PROGMEM prog_uchar script9 [] = "Yellow";
-const static PROGMEM prog_uchar script10[] = "Purple";
-const static PROGMEM prog_uchar script11[] = "Orange";
-const static PROGMEM prog_uchar script12[] = "Almond";
-const static PROGMEM prog_uchar script13[] = "Peach Puff";
-const static PROGMEM prog_uchar script14[] = "Mint Cream";
-const static PROGMEM prog_uchar script15[] = "Alice Blue";
-const static PROGMEM prog_uchar script16[] = "Lavender";
-const static PROGMEM prog_uchar script17[] = "Misty Rose";
-const static PROGMEM prog_uchar script18[] = "Slate Gray";
-const static PROGMEM prog_uchar script19[] = "Gray";
-const static PROGMEM prog_uchar script20[] = "Light Gray";
-const static PROGMEM prog_uchar script21[] = "MidnghtBlu";
-const static PROGMEM prog_uchar script22[] = "DeepSkyBlu";
-const static PROGMEM prog_uchar script23[] = "OliveGreen";
-const static PROGMEM prog_uchar script24[] = "ForstGreen";
-const static PROGMEM prog_uchar script25[] = "Gold";
-const static PROGMEM prog_uchar script26[] = "Hot Pink";
-const static PROGMEM prog_uchar script27[] = "Linen";
-const static PROGMEM prog_uchar script100[] = "WRGB";
-const static PROGMEM prog_uchar script101[] = "RGB";
-const static PROGMEM prog_uchar script102[] = "WhiteFlash";
-const static PROGMEM prog_uchar script103[] = "Red Flash";
-const static PROGMEM prog_uchar script104[] = "GreenFlash";
-const static PROGMEM prog_uchar script105[] = "Blue Flash";
-const static PROGMEM prog_uchar script106[] = "Cyan Flash";
-const static PROGMEM prog_uchar script107[] = "MgntaFlash";
-const static PROGMEM prog_uchar script108[] = "Yell Flash";
-const static PROGMEM prog_uchar script109[] = "Black";
-const static PROGMEM prog_uchar script110[] = "Hue Cycle";
-const static PROGMEM prog_uchar script111[] = "Mood Light";
-const static PROGMEM prog_uchar script112[] = "Candle";
-const static PROGMEM prog_uchar script113[] = "Water";
-const static PROGMEM prog_uchar script114[] = "Old Neon";
-const static PROGMEM prog_uchar script115[] = "Seasons";
-const static PROGMEM prog_uchar script116[] = "Thundrstrm";
-const static PROGMEM prog_uchar script117[] = "Stop Light";
-const static PROGMEM prog_uchar script118[] = "S. O. S.";
-const static PROGMEM prog_uchar script_unknown[] = "UNKNOWN";
+const static unsigned char PROGMEM script0 [] = "Bot Status";
+const static unsigned char PROGMEM script1 [] = "Custom RGB";
+const static unsigned char PROGMEM script2 [] = "Off";
+const static unsigned char PROGMEM script3 [] = "White";
+const static unsigned char PROGMEM script4 [] = "Red";
+const static unsigned char PROGMEM script5 [] = "Green";
+const static unsigned char PROGMEM script6 [] = "Blue";
+const static unsigned char PROGMEM script7 [] = "Cyan";
+const static unsigned char PROGMEM script8 [] = "Magenta";
+const static unsigned char PROGMEM script9 [] = "Yellow";
+const static unsigned char PROGMEM script10[] = "Purple";
+const static unsigned char PROGMEM script11[] = "Orange";
+const static unsigned char PROGMEM script12[] = "Almond";
+const static unsigned char PROGMEM script13[] = "Peach Puff";
+const static unsigned char PROGMEM script14[] = "Mint Cream";
+const static unsigned char PROGMEM script15[] = "Alice Blue";
+const static unsigned char PROGMEM script16[] = "Lavender";
+const static unsigned char PROGMEM script17[] = "Misty Rose";
+const static unsigned char PROGMEM script18[] = "Slate Gray";
+const static unsigned char PROGMEM script19[] = "Gray";
+const static unsigned char PROGMEM script20[] = "Light Gray";
+const static unsigned char PROGMEM script21[] = "MidnghtBlu";
+const static unsigned char PROGMEM script22[] = "DeepSkyBlu";
+const static unsigned char PROGMEM script23[] = "OliveGreen";
+const static unsigned char PROGMEM script24[] = "ForstGreen";
+const static unsigned char PROGMEM script25[] = "Gold";
+const static unsigned char PROGMEM script26[] = "Hot Pink";
+const static unsigned char PROGMEM script27[] = "Linen";
+const static unsigned char PROGMEM script100[] = "WRGB";
+const static unsigned char PROGMEM script101[] = "RGB";
+const static unsigned char PROGMEM script102[] = "WhiteFlash";
+const static unsigned char PROGMEM script103[] = "Red Flash";
+const static unsigned char PROGMEM script104[] = "GreenFlash";
+const static unsigned char PROGMEM script105[] = "Blue Flash";
+const static unsigned char PROGMEM script106[] = "Cyan Flash";
+const static unsigned char PROGMEM script107[] = "MgntaFlash";
+const static unsigned char PROGMEM script108[] = "Yell Flash";
+const static unsigned char PROGMEM script109[] = "Black";
+const static unsigned char PROGMEM script110[] = "Hue Cycle";
+const static unsigned char PROGMEM script111[] = "Mood Light";
+const static unsigned char PROGMEM script112[] = "Candle";
+const static unsigned char PROGMEM script113[] = "Water";
+const static unsigned char PROGMEM script114[] = "Old Neon";
+const static unsigned char PROGMEM script115[] = "Seasons";
+const static unsigned char PROGMEM script116[] = "Thundrstrm";
+const static unsigned char PROGMEM script117[] = "Stop Light";
+const static unsigned char PROGMEM script118[] = "S. O. S.";
+const static unsigned char PROGMEM script_unknown[] = "UNKNOWN";
 
 //There has to be a better way, however PROGMEM precludes it
 
-const PROGMEM prog_uchar *MoodLightController::scriptIdToStr(uint8_t scriptId)
+const unsigned char PROGMEM *MoodLightController::scriptIdToStr(uint8_t scriptId)
 {
     switch(scriptId)
     {

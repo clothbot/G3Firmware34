@@ -1,0 +1,1366 @@
+diff -c -r '-x.*' G3Firmware34/firmware/src/Motherboard/Host.cc G3Firmware34.patched/firmware/src/Motherboard/Host.cc
+*** G3Firmware34/firmware/src/Motherboard/Host.cc	2012-05-21 20:39:21.630721436 -0400
+--- G3Firmware34.patched/firmware/src/Motherboard/Host.cc	2012-05-21 18:26:15.475120236 -0400
+***************
+*** 646,652 ****
+      }
+  
+      // If it's still zero, load in a default.
+!     const static PROGMEM prog_uchar defaultMachineName[] =  "Thing-O-Matic";
+  
+      if (machineName[0] == 0)
+      {
+--- 646,652 ----
+      }
+  
+      // If it's still zero, load in a default.
+!     const static unsigned char PROGMEM defaultMachineName[] =  "Thing-O-Matic";
+  
+      if (machineName[0] == 0)
+      {
+diff -c -r '-x.*' G3Firmware34/firmware/src/shared/LiquidCrystal.cc G3Firmware34.patched/firmware/src/shared/LiquidCrystal.cc
+*** G3Firmware34/firmware/src/shared/LiquidCrystal.cc	2012-05-21 20:39:21.634721452 -0400
+--- G3Firmware34.patched/firmware/src/shared/LiquidCrystal.cc	2012-05-21 18:42:37.623990447 -0400
+***************
+*** 258,264 ****
+  void LiquidCrystal::clear()
+  {
+      command(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
+!     _delay_us(_clearDelay);  // this command takes a long time!
+  }
+  
+  void LiquidCrystal::home()
+--- 258,265 ----
+  void LiquidCrystal::clear()
+  {
+      command(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
+!    for (int i = 0; i < _clearDelay; i++) 
+!       { _delay_us(1); } 
+  }
+  
+  void LiquidCrystal::home()
+***************
+*** 483,489 ****
+  
+  void LiquidCrystal::writeFixedPoint(int64_t value, uint8_t padding, uint8_t precision)
+  {
+!     const static PROGMEM prog_uchar overflow[]  = "overflow";
+  
+      int64_t divisor = 1;
+      for (uint8_t i = 0; i < (padding + precision); i ++ )
+--- 484,490 ----
+  
+  void LiquidCrystal::writeFixedPoint(int64_t value, uint8_t padding, uint8_t precision)
+  {
+!     const static unsigned char PROGMEM overflow[]  = "overflow";
+  
+      int64_t divisor = 1;
+      for (uint8_t i = 0; i < (padding + precision); i ++ )
+***************
+*** 517,523 ****
+      }
+  }
+  
+! void LiquidCrystal::writeFromPgmspace(const prog_uchar message[])
+  {
+      char letter;
+      while (letter = pgm_read_byte(message++))
+--- 518,524 ----
+      }
+  }
+  
+! void LiquidCrystal::writeFromPgmspace(const unsigned char PROGMEM message[])
+  {
+      char letter;
+      while (letter = pgm_read_byte(message++))
+diff -c -r '-x.*' G3Firmware34/firmware/src/shared/LiquidCrystal.hh G3Firmware34.patched/firmware/src/shared/LiquidCrystal.hh
+*** G3Firmware34/firmware/src/shared/LiquidCrystal.hh	2012-05-21 20:39:21.634721452 -0400
+--- G3Firmware34.patched/firmware/src/shared/LiquidCrystal.hh	2012-05-21 18:28:02.883652839 -0400
+***************
+*** 96,102 ****
+  
+      void writeString(char message[]);
+  
+!     void writeFromPgmspace(const prog_uchar message[]);
+  
+      void command(uint8_t);
+  
+--- 96,102 ----
+  
+      void writeString(char message[]);
+  
+!     void writeFromPgmspace(const unsigned char PROGMEM  message[]);
+  
+      void command(uint8_t);
+  
+diff -c -r '-x.*' G3Firmware34/firmware/src/shared/Menu.cc G3Firmware34.patched/firmware/src/shared/Menu.cc
+*** G3Firmware34/firmware/src/shared/Menu.cc	2012-05-21 20:39:21.638721473 -0400
+--- G3Firmware34.patched/firmware/src/shared/Menu.cc	2012-05-21 18:26:15.595120832 -0400
+***************
+*** 352,361 ****
+  
+  void SplashScreen::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar splash1[] = " Jetty Firmware ";
+!     const static PROGMEM prog_uchar splash2[] = "  ------------- ";
+!     const static PROGMEM prog_uchar splash3[] = "Thing 15380 3.4 ";
+!     const static PROGMEM prog_uchar splash4[] = " Revision: ____ ";
+  
+      if (forceRedraw)
+      {
+--- 352,361 ----
+  
+  void SplashScreen::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM splash1[] = " Jetty Firmware ";
+!     const static unsigned char PROGMEM splash2[] = "  ------------- ";
+!     const static unsigned char PROGMEM splash3[] = "Thing 15380 3.4 ";
+!     const static unsigned char PROGMEM splash4[] = " Revision: ____ ";
+  
+      if (forceRedraw)
+      {
+***************
+*** 407,415 ****
+  
+  void UserViewMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static PROGMEM prog_uchar msg[]  = "X/Y Direction:";
+!     const static PROGMEM prog_uchar model[]= "Model View";
+!     const static PROGMEM prog_uchar user[] = "User View";
+  
+      switch (index)
+      {
+--- 407,415 ----
+  
+  void UserViewMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static unsigned char PROGMEM msg[]  = "X/Y Direction:";
+!     const static unsigned char PROGMEM model[]= "Model View";
+!     const static unsigned char PROGMEM user[] = "User View";
+  
+      switch (index)
+      {
+***************
+*** 563,579 ****
+  
+  void JogMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar jog1[]      = "Jog mode: ";
+!     const static PROGMEM prog_uchar jog2[] 	    = "   Y+         Z+";
+!     const static PROGMEM prog_uchar jog3[]      = "X- V  X+  (mode)";
+!     const static PROGMEM prog_uchar jog4[]      = "   Y-         Z-";
+!     const static PROGMEM prog_uchar jog2_user[] = "  Y           Z+";
+!     const static PROGMEM prog_uchar jog3_user[] = "X V X     (mode)";
+!     const static PROGMEM prog_uchar jog4_user[] = "  Y           Z-";
+! 
+!     const static PROGMEM prog_uchar distance0_1mm[] = ".1mm";
+!     const static PROGMEM prog_uchar distance1mm[] = "1mm";
+!     const static PROGMEM prog_uchar distanceCont[] = "Cont..";
+  
+      if ( userViewModeChanged ) userViewMode = eeprom::getEeprom8(eeprom::JOG_MODE_SETTINGS, EEPROM_DEFAULT_JOG_MODE_SETTINGS) & 0x01;
+  
+--- 563,579 ----
+  
+  void JogMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM jog1[]      = "Jog mode: ";
+!     const static unsigned char PROGMEM jog2[] 	    = "   Y+         Z+";
+!     const static unsigned char PROGMEM jog3[]      = "X- V  X+  (mode)";
+!     const static unsigned char PROGMEM jog4[]      = "   Y-         Z-";
+!     const static unsigned char PROGMEM jog2_user[] = "  Y           Z+";
+!     const static unsigned char PROGMEM jog3_user[] = "X V X     (mode)";
+!     const static unsigned char PROGMEM jog4_user[] = "  Y           Z-";
+! 
+!     const static unsigned char PROGMEM distance0_1mm[] = ".1mm";
+!     const static unsigned char PROGMEM distance1mm[] = "1mm";
+!     const static unsigned char PROGMEM distanceCont[] = "Cont..";
+  
+      if ( userViewModeChanged ) userViewMode = eeprom::getEeprom8(eeprom::JOG_MODE_SETTINGS, EEPROM_DEFAULT_JOG_MODE_SETTINGS) & 0x01;
+  
+***************
+*** 684,695 ****
+  
+  void ExtruderMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar extrude1[] = "Extrude: ";
+!     const static PROGMEM prog_uchar extrude2[] = "(set mm/s)   Fwd";
+!     const static PROGMEM prog_uchar extrude3[] = " (stop)    (dur)";
+!     const static PROGMEM prog_uchar extrude4[] = "---/---C     Rev";
+!     const static PROGMEM prog_uchar secs[]     = "SECS";
+!     const static PROGMEM prog_uchar blank[]    = "       ";
+  
+      if (overrideExtrudeSeconds)	extrude((int32_t)overrideExtrudeSeconds, true);
+  
+--- 684,695 ----
+  
+  void ExtruderMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM extrude1[] = "Extrude: ";
+!     const static unsigned char PROGMEM extrude2[] = "(set mm/s)   Fwd";
+!     const static unsigned char PROGMEM extrude3[] = " (stop)    (dur)";
+!     const static unsigned char PROGMEM extrude4[] = "---/---C     Rev";
+!     const static unsigned char PROGMEM secs[]     = "SECS";
+!     const static unsigned char PROGMEM blank[]    = "       ";
+  
+      if (overrideExtrudeSeconds)	extrude((int32_t)overrideExtrudeSeconds, true);
+  
+***************
+*** 895,903 ****
+  
+  void ExtruderTooColdMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static PROGMEM prog_uchar warning[]  = "Tool0 too cold!";
+!     const static PROGMEM prog_uchar cancel[]   =  "Cancel";
+!     const static PROGMEM prog_uchar override[] =  "Override";
+  
+      switch (index)
+      {
+--- 895,903 ----
+  
+  void ExtruderTooColdMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static unsigned char PROGMEM warning[]  = "Tool0 too cold!";
+!     const static unsigned char PROGMEM cancel[]   =  "Cancel";
+!     const static unsigned char PROGMEM override[] =  "Override";
+  
+      switch (index)
+      {
+***************
+*** 945,958 ****
+  
+  void MoodLightMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar mood1[] = "Mood: ";
+!     const static PROGMEM prog_uchar mood3_1[] = "(set RGB)";
+!     const static PROGMEM prog_uchar msg4[] = "Up/Dn/Ent to Set";
+!     const static PROGMEM prog_uchar blank[]   = "          ";
+!     const static PROGMEM prog_uchar moodNotPresent1[] = "Mood Light not";
+!     const static PROGMEM prog_uchar moodNotPresent2[] = "present!!";
+!     const static PROGMEM prog_uchar moodNotPresent3[] = "See Thingiverse";
+!     const static PROGMEM prog_uchar moodNotPresent4[] = "   thing:15347";
+  
+      //If we have no mood light, point to thingiverse to make one
+      if ( ! interface::moodLightController().blinkM.blinkMIsPresent )
+--- 945,958 ----
+  
+  void MoodLightMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM mood1[] = "Mood: ";
+!     const static unsigned char PROGMEM mood3_1[] = "(set RGB)";
+!     const static unsigned char PROGMEM msg4[] = "Up/Dn/Ent to Set";
+!     const static unsigned char PROGMEM blank[]   = "          ";
+!     const static unsigned char PROGMEM moodNotPresent1[] = "Mood Light not";
+!     const static unsigned char PROGMEM moodNotPresent2[] = "present!!";
+!     const static unsigned char PROGMEM moodNotPresent3[] = "See Thingiverse";
+!     const static unsigned char PROGMEM moodNotPresent4[] = "   thing:15347";
+  
+      //If we have no mood light, point to thingiverse to make one
+      if ( ! interface::moodLightController().blinkM.blinkMIsPresent )
+***************
+*** 1086,1095 ****
+  
+  void MoodLightSetRGBScreen::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message1_red[]   = "Red:";
+!     const static PROGMEM prog_uchar message1_green[] = "Green:";
+!     const static PROGMEM prog_uchar message1_blue[]  = "Blue:";
+!     const static PROGMEM prog_uchar message4[] = "Up/Dn/Ent to Set";
+  
+      if ((forceRedraw) || (redrawScreen))
+      {
+--- 1086,1095 ----
+  
+  void MoodLightSetRGBScreen::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message1_red[]   = "Red:";
+!     const static unsigned char PROGMEM message1_green[] = "Green:";
+!     const static unsigned char PROGMEM message1_blue[]  = "Blue:";
+!     const static unsigned char PROGMEM message4[] = "Up/Dn/Ent to Set";
+  
+      if ((forceRedraw) || (redrawScreen))
+      {
+***************
+*** 1189,1210 ****
+  
+  void MonitorMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar extruder_temp[]      =   "Tool   ---/---\001";
+!     const static PROGMEM prog_uchar platform_temp[]      =   "Bed    ---/---\001";
+!     const static PROGMEM prog_uchar elapsed_time[]       =   "Elapsed:   0h00m";
+!     const static PROGMEM prog_uchar completed_percent[]  =   "Completed:   0% ";
+!     const static PROGMEM prog_uchar time_left[]          =   "TimeLeft:  0h00m";
+!     const static PROGMEM prog_uchar duration[]           =   "Duration:  0h00m";
+!     const static PROGMEM prog_uchar time_left_secs[]     =   "secs";
+!     const static PROGMEM prog_uchar time_left_none[]     =   "   none";
+!     const static PROGMEM prog_uchar zpos[] 		     =   "ZPos:           ";
+!     const static PROGMEM prog_uchar speed[] 	     =   "Acc:            ";
+!     const static PROGMEM prog_uchar zpos_mm[] 	     =   "mm";
+!     const static PROGMEM prog_uchar estimate2[]          =   "Estimating:   0%";
+!     const static PROGMEM prog_uchar estimate3[]          =   "          (skip)";
+!     const static PROGMEM prog_uchar filament[]           =   "Filament:0.00m  ";
+!     const static PROGMEM prog_uchar copies[]	     =   "Copy:           ";
+!     const static PROGMEM prog_uchar of[]		     =   " of ";
+      char buf[17];
+  
+      if ( command::isPaused() )
+--- 1189,1210 ----
+  
+  void MonitorMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM extruder_temp[]      =   "Tool   ---/---\001";
+!     const static unsigned char PROGMEM platform_temp[]      =   "Bed    ---/---\001";
+!     const static unsigned char PROGMEM elapsed_time[]       =   "Elapsed:   0h00m";
+!     const static unsigned char PROGMEM completed_percent[]  =   "Completed:   0% ";
+!     const static unsigned char PROGMEM time_left[]          =   "TimeLeft:  0h00m";
+!     const static unsigned char PROGMEM duration[]           =   "Duration:  0h00m";
+!     const static unsigned char PROGMEM time_left_secs[]     =   "secs";
+!     const static unsigned char PROGMEM time_left_none[]     =   "   none";
+!     const static unsigned char PROGMEM zpos[] 		     =   "ZPos:           ";
+!     const static unsigned char PROGMEM speed[] 	     =   "Acc:            ";
+!     const static unsigned char PROGMEM zpos_mm[] 	     =   "mm";
+!     const static unsigned char PROGMEM estimate2[]          =   "Estimating:   0%";
+!     const static unsigned char PROGMEM estimate3[]          =   "          (skip)";
+!     const static unsigned char PROGMEM filament[]           =   "Filament:0.00m  ";
+!     const static unsigned char PROGMEM copies[]	     =   "Copy:           ";
+!     const static unsigned char PROGMEM of[]		     =   " of ";
+      char buf[17];
+  
+      if ( command::isPaused() )
+***************
+*** 1652,1661 ****
+  
+  void VersionMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar version1[] = "Motherboard: _._";
+!     const static PROGMEM prog_uchar version2[] = "   Extruder: _._";
+!     const static PROGMEM prog_uchar version3[] = "   Revision:___";
+!     const static PROGMEM prog_uchar version4[] = "FreeSram: ";
+  
+      if (forceRedraw)
+      {
+--- 1652,1661 ----
+  
+  void VersionMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM version1[] = "Motherboard: _._";
+!     const static unsigned char PROGMEM version2[] = "   Extruder: _._";
+!     const static unsigned char PROGMEM version3[] = "   Revision:___";
+!     const static unsigned char PROGMEM version4[] = "FreeSram: ";
+  
+      if (forceRedraw)
+      {
+***************
+*** 1715,1721 ****
+  
+  void Menu::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar blankLine[] =  "                ";
+  
+      uint8_t height = lcd.getDisplayHeight();
+  
+--- 1715,1721 ----
+  
+  void Menu::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM blankLine[] =  "                ";
+  
+      uint8_t height = lcd.getDisplayHeight();
+  
+***************
+*** 1865,1877 ****
+  
+  void CancelBuildMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static PROGMEM prog_uchar choose[]	= "Please Choose:";
+!     const static PROGMEM prog_uchar abort[]		= "Abort Print   ";
+!     const static PROGMEM prog_uchar printAnother[]	= "Print Another";
+!     const static PROGMEM prog_uchar pauseZ[]	= "Pause at ZPos ";
+!     const static PROGMEM prog_uchar pause[]		= "Pause         ";
+!     const static PROGMEM prog_uchar pauseNoHeat[]	= "Pause No Heat ";
+!     const static PROGMEM prog_uchar back[]		= "Continue Build";
+  
+      if ( ( estimatingBuild ) || ( steppers::isHoming() ) ||
+              (sdcard::getPercentPlayed() >= 100.0))	pauseDisabled = true;
+--- 1865,1877 ----
+  
+  void CancelBuildMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static unsigned char PROGMEM choose[]	= "Please Choose:";
+!     const static unsigned char PROGMEM abort[]		= "Abort Print   ";
+!     const static unsigned char PROGMEM printAnother[]	= "Print Another";
+!     const static unsigned char PROGMEM pauseZ[]	= "Pause at ZPos ";
+!     const static unsigned char PROGMEM pause[]		= "Pause         ";
+!     const static unsigned char PROGMEM pauseNoHeat[]	= "Pause No Heat ";
+!     const static unsigned char PROGMEM back[]		= "Continue Build";
+  
+      if ( ( estimatingBuild ) || ( steppers::isHoming() ) ||
+              (sdcard::getPercentPlayed() >= 100.0))	pauseDisabled = true;
+***************
+*** 2005,2031 ****
+  
+  void MainMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static PROGMEM prog_uchar monitor[]	= "Monitor";
+!     const static PROGMEM prog_uchar build[]		= "Build from SD";
+!     const static PROGMEM prog_uchar jog[]		= "Jog";
+!     const static PROGMEM prog_uchar preheat[]	= "Preheat";
+!     const static PROGMEM prog_uchar extruder[]	= "Extrude";
+!     const static PROGMEM prog_uchar homeAxis[]	= "Home Axis";
+!     const static PROGMEM prog_uchar advanceABP[]	= "Advance ABP";
+!     const static PROGMEM prog_uchar steppersS[]	= "Steppers";
+!     const static PROGMEM prog_uchar moodlight[]	= "Mood Light";
+!     const static PROGMEM prog_uchar buzzer[]	= "Buzzer";
+!     const static PROGMEM prog_uchar buildSettings[]	= "Build Settings";
+!     const static PROGMEM prog_uchar profiles[]	= "Profiles";
+!     const static PROGMEM prog_uchar extruderFan[]	= "Extruder Fan";
+!     const static PROGMEM prog_uchar calibrate[]	= "Calibrate";
+!     const static PROGMEM prog_uchar homeOffsets[]	= "Home Offsets";
+!     const static PROGMEM prog_uchar filamentUsed[]	= "Filament Used";
+!     const static PROGMEM prog_uchar currentPosition[]= "Position";
+!     const static PROGMEM prog_uchar endStops[]	= "Test End Stops";
+!     const static PROGMEM prog_uchar stepsPerMm[]	= "Axis Steps:mm";
+!     const static PROGMEM prog_uchar homingRates[]	= "Homing Rates";
+!     const static PROGMEM prog_uchar versions[]	= "Version";
+  
+      switch (index)
+      {
+--- 2005,2031 ----
+  
+  void MainMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static unsigned char PROGMEM monitor[]	= "Monitor";
+!     const static unsigned char PROGMEM build[]		= "Build from SD";
+!     const static unsigned char PROGMEM jog[]		= "Jog";
+!     const static unsigned char PROGMEM preheat[]	= "Preheat";
+!     const static unsigned char PROGMEM extruder[]	= "Extrude";
+!     const static unsigned char PROGMEM homeAxis[]	= "Home Axis";
+!     const static unsigned char PROGMEM advanceABP[]	= "Advance ABP";
+!     const static unsigned char PROGMEM steppersS[]	= "Steppers";
+!     const static unsigned char PROGMEM moodlight[]	= "Mood Light";
+!     const static unsigned char PROGMEM buzzer[]	= "Buzzer";
+!     const static unsigned char PROGMEM buildSettings[]	= "Build Settings";
+!     const static unsigned char PROGMEM profiles[]	= "Profiles";
+!     const static unsigned char PROGMEM extruderFan[]	= "Extruder Fan";
+!     const static unsigned char PROGMEM calibrate[]	= "Calibrate";
+!     const static unsigned char PROGMEM homeOffsets[]	= "Home Offsets";
+!     const static unsigned char PROGMEM filamentUsed[]	= "Filament Used";
+!     const static unsigned char PROGMEM currentPosition[]= "Position";
+!     const static unsigned char PROGMEM endStops[]	= "Test End Stops";
+!     const static unsigned char PROGMEM stepsPerMm[]	= "Axis Steps:mm";
+!     const static unsigned char PROGMEM homingRates[]	= "Homing Rates";
+!     const static unsigned char PROGMEM versions[]	= "Version";
+  
+      switch (index)
+      {
+***************
+*** 2405,2411 ****
+  
+  void ValueSetScreen::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message4[] = "Up/Dn/Ent to Set";
+  
+      if (forceRedraw)
+      {
+--- 2405,2411 ----
+  
+  void ValueSetScreen::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message4[] = "Up/Dn/Ent to Set";
+  
+      if (forceRedraw)
+      {
+***************
+*** 2494,2505 ****
+  
+  void PreheatMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static PROGMEM prog_uchar heat[]     = "Heat ";
+!     const static PROGMEM prog_uchar cool[]     = "Cool ";
+!     const static PROGMEM prog_uchar tool0[]    = "Tool0";
+!     const static PROGMEM prog_uchar platform[] = "Bed";
+!     const static PROGMEM prog_uchar tool0set[] = "Set Tool0 Temp";
+!     const static PROGMEM prog_uchar platset[]  = "Set Bed Temp";
+  
+      switch (index)
+      {
+--- 2494,2505 ----
+  
+  void PreheatMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static unsigned char PROGMEM heat[]     = "Heat ";
+!     const static unsigned char PROGMEM cool[]     = "Cool ";
+!     const static unsigned char PROGMEM tool0[]    = "Tool0";
+!     const static unsigned char PROGMEM platform[] = "Bed";
+!     const static unsigned char PROGMEM tool0set[] = "Set Tool0 Temp";
+!     const static unsigned char PROGMEM platset[]  = "Set Bed Temp";
+  
+      switch (index)
+      {
+***************
+*** 2593,2602 ****
+  
+  void HomeAxisMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar home1[] = "Home Axis: ";
+!     const static PROGMEM prog_uchar home2[] = "  Y            Z";
+!     const static PROGMEM prog_uchar home3[] = "X   X (endstops)";
+!     const static PROGMEM prog_uchar home4[] = "  Y            Z";
+  
+      if (forceRedraw)
+      {
+--- 2593,2602 ----
+  
+  void HomeAxisMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM home1[] = "Home Axis: ";
+!     const static unsigned char PROGMEM home2[] = "  Y            Z";
+!     const static unsigned char PROGMEM home3[] = "X   X (endstops)";
+!     const static unsigned char PROGMEM home4[] = "  Y            Z";
+  
+      if (forceRedraw)
+      {
+***************
+*** 2698,2705 ****
+  
+  void EnabledDisabledMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static PROGMEM prog_uchar disable[]   =  "Disable";
+!     const static PROGMEM prog_uchar enable[] =  "Enable";
+  
+      switch (index)
+      {
+--- 2698,2705 ----
+  
+  void EnabledDisabledMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static unsigned char PROGMEM disable[]   =  "Disable";
+!     const static unsigned char PROGMEM enable[] =  "Enable";
+  
+      switch (index)
+      {
+***************
+*** 2754,2765 ****
+  
+  void TestEndStopsMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar test1[] = "Test End Stops: ";
+!     const static PROGMEM prog_uchar test2[] = "XMin:N    XMax:N";
+!     const static PROGMEM prog_uchar test3[] = "YMin:N    YMax:N";
+!     const static PROGMEM prog_uchar test4[] = "ZMin:N    ZMax:N";
+!     const static PROGMEM prog_uchar strY[]  = "Y";
+!     const static PROGMEM prog_uchar strN[]  = "N";
+  
+      if (forceRedraw)
+      {
+--- 2754,2765 ----
+  
+  void TestEndStopsMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM test1[] = "Test End Stops: ";
+!     const static unsigned char PROGMEM test2[] = "XMin:N    XMax:N";
+!     const static unsigned char PROGMEM test3[] = "YMin:N    YMax:N";
+!     const static unsigned char PROGMEM test4[] = "ZMin:N    ZMax:N";
+!     const static unsigned char PROGMEM strY[]  = "Y";
+!     const static unsigned char PROGMEM strN[]  = "N";
+  
+      if (forceRedraw)
+      {
+***************
+*** 2826,2841 ****
+  
+  void PauseMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar waitForCurrentCommand[] = "Entering pause..";
+!     const static PROGMEM prog_uchar retractFilament[]	= "Retract Filament";
+!     const static PROGMEM prog_uchar movingZ[] 		= "Moving Z up 2mm ";
+!     const static PROGMEM prog_uchar movingY[]		= "Moving Y 2mm    ";
+!     const static PROGMEM prog_uchar heating[]		= "Heating... ";
+!     const static PROGMEM prog_uchar leavingPaused[]		= "Leaving pause.. ";
+!     const static PROGMEM prog_uchar paused1[] 		= "Paused(";
+!     const static PROGMEM prog_uchar paused2[] 		= "   Y+         Z+";
+!     const static PROGMEM prog_uchar paused3[] 		= "X- Rev X+  (Fwd)";
+!     const static PROGMEM prog_uchar paused4[] 		= "   Y-         Z-";
+  
+      int32_t interval = 1000;
+  
+--- 2826,2841 ----
+  
+  void PauseMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM waitForCurrentCommand[] = "Entering pause..";
+!     const static unsigned char PROGMEM retractFilament[]	= "Retract Filament";
+!     const static unsigned char PROGMEM movingZ[] 		= "Moving Z up 2mm ";
+!     const static unsigned char PROGMEM movingY[]		= "Moving Y 2mm    ";
+!     const static unsigned char PROGMEM heating[]		= "Heating... ";
+!     const static unsigned char PROGMEM leavingPaused[]		= "Leaving pause.. ";
+!     const static unsigned char PROGMEM paused1[] 		= "Paused(";
+!     const static unsigned char PROGMEM paused2[] 		= "   Y+         Z+";
+!     const static unsigned char PROGMEM paused3[] 		= "X- Rev X+  (Fwd)";
+!     const static unsigned char PROGMEM paused4[] 		= "   Y-         Z-";
+  
+      int32_t interval = 1000;
+  
+***************
+*** 3067,3075 ****
+  
+  void PauseAtZPosScreen::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message1[] = "Pause at ZPos:";
+!     const static PROGMEM prog_uchar message4[] = "Up/Dn/Ent to Set";
+!     const static PROGMEM prog_uchar mm[]    = "mm   ";
+  
+      if (forceRedraw)
+      {
+--- 3067,3075 ----
+  
+  void PauseAtZPosScreen::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message1[] = "Pause at ZPos:";
+!     const static unsigned char PROGMEM message4[] = "Up/Dn/Ent to Set";
+!     const static unsigned char PROGMEM mm[]    = "mm   ";
+  
+      if (forceRedraw)
+      {
+***************
+*** 3134,3142 ****
+  
+  void AdvanceABPMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar abp1[] = "Advance ABP:";
+!     const static PROGMEM prog_uchar abp2[] = "hold key...";
+!     const static PROGMEM prog_uchar abp3[] = "           (fwd)";
+  
+      if (forceRedraw)
+      {
+--- 3134,3142 ----
+  
+  void AdvanceABPMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM abp1[] = "Advance ABP:";
+!     const static unsigned char PROGMEM abp2[] = "hold key...";
+!     const static unsigned char PROGMEM abp3[] = "           (fwd)";
+  
+      if (forceRedraw)
+      {
+***************
+*** 3198,3218 ****
+  
+  void CalibrateMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar calib1[] = "Calibrate: Move ";
+!     const static PROGMEM prog_uchar calib2[] = "build platform";
+!     const static PROGMEM prog_uchar calib3[] = "until nozzle...";
+!     const static PROGMEM prog_uchar calib4[] = "          (cont)";
+!     const static PROGMEM prog_uchar calib5[] = "lies in center,";
+!     const static PROGMEM prog_uchar calib6[] = "turn threaded";
+!     const static PROGMEM prog_uchar calib7[] = "rod until...";
+!     const static PROGMEM prog_uchar calib8[] = "nozzle just";
+!     const static PROGMEM prog_uchar calib9[] = "touches.";
+!     const static PROGMEM prog_uchar homeZ[]  = "Homing Z...";
+!     const static PROGMEM prog_uchar homeY[]  = "Homing Y...";
+!     const static PROGMEM prog_uchar homeX[]  = "Homing X...";
+!     const static PROGMEM prog_uchar done[]   = "! Calibrated !";
+!     const static PROGMEM prog_uchar regen[]  = "Regenerate gcode";
+!     const static PROGMEM prog_uchar reset[]  = "         (reset)";
+  
+      if ((forceRedraw) || (calibrationState != lastCalibrationState))
+      {
+--- 3198,3218 ----
+  
+  void CalibrateMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM calib1[] = "Calibrate: Move ";
+!     const static unsigned char PROGMEM calib2[] = "build platform";
+!     const static unsigned char PROGMEM calib3[] = "until nozzle...";
+!     const static unsigned char PROGMEM calib4[] = "          (cont)";
+!     const static unsigned char PROGMEM calib5[] = "lies in center,";
+!     const static unsigned char PROGMEM calib6[] = "turn threaded";
+!     const static unsigned char PROGMEM calib7[] = "rod until...";
+!     const static unsigned char PROGMEM calib8[] = "nozzle just";
+!     const static unsigned char PROGMEM calib9[] = "touches.";
+!     const static unsigned char PROGMEM homeZ[]  = "Homing Z...";
+!     const static unsigned char PROGMEM homeY[]  = "Homing Y...";
+!     const static unsigned char PROGMEM homeX[]  = "Homing X...";
+!     const static unsigned char PROGMEM done[]   = "! Calibrated !";
+!     const static unsigned char PROGMEM regen[]  = "Regenerate gcode";
+!     const static unsigned char PROGMEM reset[]  = "         (reset)";
+  
+      if ((forceRedraw) || (calibrationState != lastCalibrationState))
+      {
+***************
+*** 3393,3404 ****
+  
+  void HomeOffsetsMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message1x[] = "X Offset:";
+!     const static PROGMEM prog_uchar message1y[] = "Y Offset:";
+!     const static PROGMEM prog_uchar message1z[] = "Z Offset:";
+!     const static PROGMEM prog_uchar message4[]  = "Up/Dn/Ent to Set";
+!     const static PROGMEM prog_uchar blank[]     = " ";
+!     const static PROGMEM prog_uchar mm[]        = "mm";
+  
+      if ( homeOffsetState != lastHomeOffsetState )	forceRedraw = true;
+  
+--- 3393,3404 ----
+  
+  void HomeOffsetsMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message1x[] = "X Offset:";
+!     const static unsigned char PROGMEM message1y[] = "Y Offset:";
+!     const static unsigned char PROGMEM message1z[] = "Z Offset:";
+!     const static unsigned char PROGMEM message4[]  = "Up/Dn/Ent to Set";
+!     const static unsigned char PROGMEM blank[]     = " ";
+!     const static unsigned char PROGMEM mm[]        = "mm";
+  
+      if ( homeOffsetState != lastHomeOffsetState )	forceRedraw = true;
+  
+***************
+*** 3506,3515 ****
+  
+  void BuzzerSetRepeatsMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message1[] = "Repeat Buzzer:";
+!     const static PROGMEM prog_uchar message2[] = "(0=Buzzer Off)";
+!     const static PROGMEM prog_uchar message4[] = "Up/Dn/Ent to Set";
+!     const static PROGMEM prog_uchar times[]    = " times ";
+  
+      if (forceRedraw)
+      {
+--- 3506,3515 ----
+  
+  void BuzzerSetRepeatsMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message1[] = "Repeat Buzzer:";
+!     const static unsigned char PROGMEM message2[] = "(0=Buzzer Off)";
+!     const static unsigned char PROGMEM message4[] = "Up/Dn/Ent to Set";
+!     const static unsigned char PROGMEM times[]    = " times ";
+  
+      if (forceRedraw)
+      {
+***************
+*** 3597,3608 ****
+  
+  void StepsPerMMMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message1x[] = "X Steps per mm:";
+!     const static PROGMEM prog_uchar message1y[] = "Y Steps per mm:";
+!     const static PROGMEM prog_uchar message1z[] = "Z Steps per mm:";
+!     const static PROGMEM prog_uchar message1a[] = "A Steps per mm:";
+!     const static PROGMEM prog_uchar message4[]  = "Up/Dn/Ent to Set";
+!     const static PROGMEM prog_uchar blank[]     = " ";
+  
+      if ( stepsPerMMState != lastStepsPerMMState )	forceRedraw = true;
+  
+--- 3597,3608 ----
+  
+  void StepsPerMMMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message1x[] = "X Steps per mm:";
+!     const static unsigned char PROGMEM message1y[] = "Y Steps per mm:";
+!     const static unsigned char PROGMEM message1z[] = "Z Steps per mm:";
+!     const static unsigned char PROGMEM message1a[] = "A Steps per mm:";
+!     const static unsigned char PROGMEM message4[]  = "Up/Dn/Ent to Set";
+!     const static unsigned char PROGMEM blank[]     = " ";
+  
+      if ( stepsPerMMState != lastStepsPerMMState )	forceRedraw = true;
+  
+***************
+*** 3761,3769 ****
+  
+  void FilamentUsedResetMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static PROGMEM prog_uchar msg[]  = "Reset To Zero?";
+!     const static PROGMEM prog_uchar no[] = "No";
+!     const static PROGMEM prog_uchar yes[]= "Yes";
+  
+      switch (index)
+      {
+--- 3761,3769 ----
+  
+  void FilamentUsedResetMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static unsigned char PROGMEM msg[]  = "Reset To Zero?";
+!     const static unsigned char PROGMEM no[] = "No";
+!     const static unsigned char PROGMEM yes[]= "Yes";
+  
+      switch (index)
+      {
+***************
+*** 3804,3813 ****
+  
+  void FilamentUsedMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar lifetime[] = "Lifetime Odo.:";
+!     const static PROGMEM prog_uchar trip[]	   = "Trip Odometer:";
+!     const static PROGMEM prog_uchar but_life[] = "(trip)   (reset)";
+!     const static PROGMEM prog_uchar but_trip[] = "(life)   (reset)";
+  
+      if ((forceRedraw) || (overrideForceRedraw))
+      {
+--- 3804,3813 ----
+  
+  void FilamentUsedMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM lifetime[] = "Lifetime Odo.:";
+!     const static unsigned char PROGMEM trip[]	   = "Trip Odometer:";
+!     const static unsigned char PROGMEM but_life[] = "(trip)   (reset)";
+!     const static unsigned char PROGMEM but_trip[] = "(life)   (reset)";
+  
+      if ((forceRedraw) || (overrideForceRedraw))
+      {
+***************
+*** 3887,3897 ****
+  
+  void BuildSettingsMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static PROGMEM prog_uchar item1[] = "EstimatePreheat";
+!     const static PROGMEM prog_uchar item2[] = "Override Temp";
+!     const static PROGMEM prog_uchar item3[] = "ABP Copies (SD)";
+!     const static PROGMEM prog_uchar item4[] = "Acceleration";
+!     const static PROGMEM prog_uchar item5[] = "5D Extruder";
+  
+      switch (index)
+      {
+--- 3887,3897 ----
+  
+  void BuildSettingsMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static unsigned char PROGMEM item1[] = "EstimatePreheat";
+!     const static unsigned char PROGMEM item2[] = "Override Temp";
+!     const static unsigned char PROGMEM item3[] = "ABP Copies (SD)";
+!     const static unsigned char PROGMEM item4[] = "Acceleration";
+!     const static unsigned char PROGMEM item5[] = "5D Extruder";
+  
+      switch (index)
+      {
+***************
+*** 3954,3961 ****
+  
+  void ABPCopiesSetScreen::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message1[] = "ABP Copies (SD):";
+!     const static PROGMEM prog_uchar message4[] = "Up/Dn/Ent to Set";
+  
+      if (forceRedraw)
+      {
+--- 3954,3961 ----
+  
+  void ABPCopiesSetScreen::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message1[] = "ABP Copies (SD):";
+!     const static unsigned char PROGMEM message4[] = "Up/Dn/Ent to Set";
+  
+      if (forceRedraw)
+      {
+***************
+*** 4091,4102 ****
+  
+  void StepperDriverAcceleratedMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static PROGMEM prog_uchar msg1[]   	  = "Accelerated";
+!     const static PROGMEM prog_uchar msg2[]   	  = "Stepper Driver:";
+!     const static PROGMEM prog_uchar off[]    	  =  "Off";
+!     const static PROGMEM prog_uchar offStrangled[]    =  "Off - Strangled";
+!     const static PROGMEM prog_uchar on[]     	  =  "On - No Planner";
+!     const static PROGMEM prog_uchar planner[]	  =  "On - Planner";
+  
+      switch (index)
+      {
+--- 4091,4102 ----
+  
+  void StepperDriverAcceleratedMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static unsigned char PROGMEM msg1[]   	  = "Accelerated";
+!     const static unsigned char PROGMEM msg2[]   	  = "Stepper Driver:";
+!     const static unsigned char PROGMEM off[]    	  =  "Off";
+!     const static unsigned char PROGMEM offStrangled[]    =  "Off - Strangled";
+!     const static unsigned char PROGMEM on[]     	  =  "On - No Planner";
+!     const static unsigned char PROGMEM planner[]	  =  "On - Planner";
+  
+      switch (index)
+      {
+***************
+*** 4264,4270 ****
+      //If the value is 0xff, write the profile number
+      uint8_t buf[PROFILE_NAME_LENGTH];
+  
+!     const static PROGMEM prog_uchar defaultProfile[] =  "Profile?";
+  
+      //Get the home axis positions, we may need this to write the defaults
+      homePosition = steppers::getPosition();
+--- 4264,4270 ----
+      //If the value is 0xff, write the profile number
+      uint8_t buf[PROFILE_NAME_LENGTH];
+  
+!     const static unsigned char PROGMEM defaultProfile[] =  "Profile?";
+  
+      //Get the home axis positions, we may need this to write the defaults
+      homePosition = steppers::getPosition();
+***************
+*** 4328,4337 ****
+  
+  void ProfileSubMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static PROGMEM prog_uchar msg1[]  = "Restore";
+!     const static PROGMEM prog_uchar msg2[]  = "Display Config";
+!     const static PROGMEM prog_uchar msg3[]  = "Change Name";
+!     const static PROGMEM prog_uchar msg4[]  = "Save To Profile";
+  
+      switch (index)
+      {
+--- 4328,4337 ----
+  
+  void ProfileSubMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static unsigned char PROGMEM msg1[]  = "Restore";
+!     const static unsigned char PROGMEM msg2[]  = "Display Config";
+!     const static unsigned char PROGMEM msg3[]  = "Change Name";
+!     const static unsigned char PROGMEM msg4[]  = "Save To Profile";
+  
+      switch (index)
+      {
+***************
+*** 4426,4434 ****
+  
+  void ProfileChangeNameMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message1[] = "Profile Name:";
+!     const static PROGMEM prog_uchar message4[] = "Up/Dn/Ent to Set";
+!     const static PROGMEM prog_uchar blank[]	   = " ";
+  
+      if (forceRedraw)
+      {
+--- 4426,4434 ----
+  
+  void ProfileChangeNameMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message1[] = "Profile Name:";
+!     const static unsigned char PROGMEM message4[] = "Up/Dn/Ent to Set";
+!     const static unsigned char PROGMEM blank[]	   = " ";
+  
+      if (forceRedraw)
+      {
+***************
+*** 4523,4534 ****
+  
+  void ProfileDisplaySettingsMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static PROGMEM prog_uchar xOffset[]     = "XOff: ";
+!     const static PROGMEM prog_uchar yOffset[]     = "YOff: ";
+!     const static PROGMEM prog_uchar zOffset[]     = "ZOff: ";
+!     const static PROGMEM prog_uchar hbp[]         = "HBP Temp:   ";
+!     const static PROGMEM prog_uchar tool0[]       = "Tool0 Temp: ";
+!     const static PROGMEM prog_uchar extruder[]    = "ExtrdrMM/s: ";
+  
+      switch (index)
+      {
+--- 4523,4534 ----
+  
+  void ProfileDisplaySettingsMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static unsigned char PROGMEM xOffset[]     = "XOff: ";
+!     const static unsigned char PROGMEM yOffset[]     = "YOff: ";
+!     const static unsigned char PROGMEM zOffset[]     = "ZOff: ";
+!     const static unsigned char PROGMEM hbp[]         = "HBP Temp:   ";
+!     const static unsigned char PROGMEM tool0[]       = "Tool0 Temp: ";
+!     const static unsigned char PROGMEM extruder[]    = "ExtrdrMM/s: ";
+  
+      switch (index)
+      {
+***************
+*** 4572,4582 ****
+  
+  void CurrentPositionMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar msg1[] = "X:";
+!     const static PROGMEM prog_uchar msg2[] = "Y:";
+!     const static PROGMEM prog_uchar msg3[] = "Z:";
+!     const static PROGMEM prog_uchar msg4[] = "A:";
+!     const static PROGMEM prog_uchar mm[] = "mm";
+  
+      if (forceRedraw)
+      {
+--- 4572,4582 ----
+  
+  void CurrentPositionMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM msg1[] = "X:";
+!     const static unsigned char PROGMEM msg2[] = "Y:";
+!     const static unsigned char PROGMEM msg3[] = "Z:";
+!     const static unsigned char PROGMEM msg4[] = "A:";
+!     const static unsigned char PROGMEM mm[] = "mm";
+  
+      if (forceRedraw)
+      {
+***************
+*** 4634,4643 ****
+  
+  void UnableToOpenFileMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static PROGMEM prog_uchar msg1[]   = "Failed to open";
+!     const static PROGMEM prog_uchar msg2[]   = "file.  Name too";
+!     const static PROGMEM prog_uchar msg3[]   = "long?";
+!     const static PROGMEM prog_uchar cont[]   =  "Continue";
+  
+      switch (index)
+      {
+--- 4634,4643 ----
+  
+  void UnableToOpenFileMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static unsigned char PROGMEM msg1[]   = "Failed to open";
+!     const static unsigned char PROGMEM msg2[]   = "file.  Name too";
+!     const static unsigned char PROGMEM msg3[]   = "long?";
+!     const static unsigned char PROGMEM cont[]   =  "Continue";
+  
+      switch (index)
+      {
+***************
+*** 4698,4730 ****
+  
+  void AcceleratedSettingsMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message1xMaxFeedRate[]  	= "X MaxFeedRate:";
+!     const static PROGMEM prog_uchar message1yMaxFeedRate[]  	= "Y MaxFeedRate:";
+!     const static PROGMEM prog_uchar message1zMaxFeedRate[]  	= "Z MaxFeedRate:";
+!     const static PROGMEM prog_uchar message1aMaxFeedRate[]  	= "A MaxFeedRate:";
+!     const static PROGMEM prog_uchar message1xMaxAccelRate[] 	= "X Max Accel:";
+!     const static PROGMEM prog_uchar message1yMaxAccelRate[] 	= "Y Max Accel:";
+!     const static PROGMEM prog_uchar message1zMaxAccelRate[] 	= "Z Max Accel:";
+!     const static PROGMEM prog_uchar message1aMaxAccelRate[] 	= "A Max Accel:";
+!     const static PROGMEM prog_uchar message1ExtruderNorm[]  	= "Acc Norm Move:";
+!     const static PROGMEM prog_uchar message1ExtruderRetract[]	= "Acc Extr Move:";
+!     const static PROGMEM prog_uchar message1MinFeedRate[]		= "Min Feed Rate:";
+!     const static PROGMEM prog_uchar message1MinTravelFeedRate[]	= "MinTrvlFeedRate:";
+!     const static PROGMEM prog_uchar message1MinPlannerSpeed[]	= "MinPlannerSpeed:";
+!     const static PROGMEM prog_uchar message1AdvanceK[]		= "JKN Advance K:";
+!     const static PROGMEM prog_uchar message1AdvanceK2[]		= "JKN Advance K2:";
+!     const static PROGMEM prog_uchar message1NoodleDiameter[]	= "Noodle Diameter:";
+!     const static PROGMEM prog_uchar message1MinSegmentTime[]	= "Min Seg Time:";
+!     const static PROGMEM prog_uchar message1RevMaxFeedRate[]	= "RevMaxFeedRate:";
+!     const static PROGMEM prog_uchar message1ExtruderDeprime[]	= "ExtruderDeprime:";
+!     const static PROGMEM prog_uchar message1SlowdownLimit[]		= "Slowdown Limit:";
+!     const static PROGMEM prog_uchar message1ClockwiseExtruder[]	= "Clockwise Extdr:";
+!     const static PROGMEM prog_uchar message1MaxSpeedChangeX[]	= "MaxSpeedChangeX:";
+!     const static PROGMEM prog_uchar message1MaxSpeedChangeY[]	= "MaxSpeedChangeY:";
+!     const static PROGMEM prog_uchar message1MaxSpeedChangeZ[]	= "MaxSpeedChangeZ:";
+!     const static PROGMEM prog_uchar message1MaxSpeedChangeA[]	= "MaxSpeedChangeA:";
+!     const static PROGMEM prog_uchar message4[]  = "Up/Dn/Ent to Set";
+!     const static PROGMEM prog_uchar blank[]     = "    ";
+  
+      if ( accelerateSettingsState != lastAccelerateSettingsState )	forceRedraw = true;
+  
+--- 4698,4730 ----
+  
+  void AcceleratedSettingsMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message1xMaxFeedRate[]  	= "X MaxFeedRate:";
+!     const static unsigned char PROGMEM message1yMaxFeedRate[]  	= "Y MaxFeedRate:";
+!     const static unsigned char PROGMEM message1zMaxFeedRate[]  	= "Z MaxFeedRate:";
+!     const static unsigned char PROGMEM message1aMaxFeedRate[]  	= "A MaxFeedRate:";
+!     const static unsigned char PROGMEM message1xMaxAccelRate[] 	= "X Max Accel:";
+!     const static unsigned char PROGMEM message1yMaxAccelRate[] 	= "Y Max Accel:";
+!     const static unsigned char PROGMEM message1zMaxAccelRate[] 	= "Z Max Accel:";
+!     const static unsigned char PROGMEM message1aMaxAccelRate[] 	= "A Max Accel:";
+!     const static unsigned char PROGMEM message1ExtruderNorm[]  	= "Acc Norm Move:";
+!     const static unsigned char PROGMEM message1ExtruderRetract[]	= "Acc Extr Move:";
+!     const static unsigned char PROGMEM message1MinFeedRate[]		= "Min Feed Rate:";
+!     const static unsigned char PROGMEM message1MinTravelFeedRate[]	= "MinTrvlFeedRate:";
+!     const static unsigned char PROGMEM message1MinPlannerSpeed[]	= "MinPlannerSpeed:";
+!     const static unsigned char PROGMEM message1AdvanceK[]		= "JKN Advance K:";
+!     const static unsigned char PROGMEM message1AdvanceK2[]		= "JKN Advance K2:";
+!     const static unsigned char PROGMEM message1NoodleDiameter[]	= "Noodle Diameter:";
+!     const static unsigned char PROGMEM message1MinSegmentTime[]	= "Min Seg Time:";
+!     const static unsigned char PROGMEM message1RevMaxFeedRate[]	= "RevMaxFeedRate:";
+!     const static unsigned char PROGMEM message1ExtruderDeprime[]	= "ExtruderDeprime:";
+!     const static unsigned char PROGMEM message1SlowdownLimit[]		= "Slowdown Limit:";
+!     const static unsigned char PROGMEM message1ClockwiseExtruder[]	= "Clockwise Extdr:";
+!     const static unsigned char PROGMEM message1MaxSpeedChangeX[]	= "MaxSpeedChangeX:";
+!     const static unsigned char PROGMEM message1MaxSpeedChangeY[]	= "MaxSpeedChangeY:";
+!     const static unsigned char PROGMEM message1MaxSpeedChangeZ[]	= "MaxSpeedChangeZ:";
+!     const static unsigned char PROGMEM message1MaxSpeedChangeA[]	= "MaxSpeedChangeA:";
+!     const static unsigned char PROGMEM message4[]  = "Up/Dn/Ent to Set";
+!     const static unsigned char PROGMEM blank[]     = "    ";
+  
+      if ( accelerateSettingsState != lastAccelerateSettingsState )	forceRedraw = true;
+  
+***************
+*** 4967,4975 ****
+  
+  void AccelerationMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static PROGMEM prog_uchar msg1[]  = "Stepper Driver";
+!     const static PROGMEM prog_uchar msg2[]  = "Accel. Settings";
+!     const static PROGMEM prog_uchar msg3[]  = "Extdr. Steps/mm";
+  
+      if (( ! acceleration ) && ( index > 0 ))	return;
+  
+--- 4967,4975 ----
+  
+  void AccelerationMenu::drawItem(uint8_t index, LiquidCrystal& lcd)
+  {
+!     const static unsigned char PROGMEM msg1[]  = "Stepper Driver";
+!     const static unsigned char PROGMEM msg2[]  = "Accel. Settings";
+!     const static unsigned char PROGMEM msg3[]  = "Extdr. Steps/mm";
+  
+      if (( ! acceleration ) && ( index > 0 ))	return;
+  
+***************
+*** 5017,5026 ****
+  
+  void EStepsPerMMMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message1[] = "Extrdr Steps/mm:";
+!     const static PROGMEM prog_uchar message2[] = "(calib)";
+!     const static PROGMEM prog_uchar message4[] = "Up/Dn/Ent to Set";
+!     const static PROGMEM prog_uchar blank[]     = "  ";
+  
+      if (forceRedraw)
+      {
+--- 5017,5026 ----
+  
+  void EStepsPerMMMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message1[] = "Extrdr Steps/mm:";
+!     const static unsigned char PROGMEM message2[] = "(calib)";
+!     const static unsigned char PROGMEM message4[] = "Up/Dn/Ent to Set";
+!     const static unsigned char PROGMEM blank[]     = "  ";
+  
+      if (forceRedraw)
+      {
+***************
+*** 5093,5102 ****
+  
+  void EStepsPerMMStepsMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message1[] = "Extrude N steps:";
+!     const static PROGMEM prog_uchar message2[] = "(extrude)";
+!     const static PROGMEM prog_uchar message4[] = "Up/Dn/Ent to Set";
+!     const static PROGMEM prog_uchar blank[]     = " ";
+  
+      if (overrideExtrudeSeconds)	extrude(true);
+  
+--- 5093,5102 ----
+  
+  void EStepsPerMMStepsMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message1[] = "Extrude N steps:";
+!     const static unsigned char PROGMEM message2[] = "(extrude)";
+!     const static unsigned char PROGMEM message4[] = "Up/Dn/Ent to Set";
+!     const static unsigned char PROGMEM blank[]     = " ";
+  
+      if (overrideExtrudeSeconds)	extrude(true);
+  
+***************
+*** 5204,5213 ****
+  
+  void EStepsPerMMLengthMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message1[] = "Enter noodle";
+!     const static PROGMEM prog_uchar message2[] = "length in mm's";
+!     const static PROGMEM prog_uchar message4[] = "Up/Dn/Ent to Set";
+!     const static PROGMEM prog_uchar blank[]     = "  ";
+  
+      if (forceRedraw)
+      {
+--- 5204,5213 ----
+  
+  void EStepsPerMMLengthMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message1[] = "Enter noodle";
+!     const static unsigned char PROGMEM message2[] = "length in mm's";
+!     const static unsigned char PROGMEM message4[] = "Up/Dn/Ent to Set";
+!     const static unsigned char PROGMEM blank[]     = "  ";
+  
+      if (forceRedraw)
+      {
+***************
+*** 5281,5289 ****
+  
+  void EndStopConfigScreen::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message1[] = "EndstopsPresent:";
+!     const static PROGMEM prog_uchar message4[] = "Up/Dn/Ent to Set";
+!     const static PROGMEM prog_uchar blank[]    = " ";
+  
+      if (forceRedraw)
+      {
+--- 5281,5289 ----
+  
+  void EndStopConfigScreen::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message1[] = "EndstopsPresent:";
+!     const static unsigned char PROGMEM message4[] = "Up/Dn/Ent to Set";
+!     const static unsigned char PROGMEM blank[]    = " ";
+  
+      if (forceRedraw)
+      {
+***************
+*** 5351,5362 ****
+  
+  void HomingFeedRatesMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static PROGMEM prog_uchar message1x[] = "X Home Feedrate:";
+!     const static PROGMEM prog_uchar message1y[] = "Y Home Feedrate:";
+!     const static PROGMEM prog_uchar message1z[] = "Z Home Feedrate:";
+!     const static PROGMEM prog_uchar message4[]  = "Up/Dn/Ent to Set";
+!     const static PROGMEM prog_uchar blank[]     = " ";
+!     const static PROGMEM prog_uchar mm[]        = "mm/min ";
+  
+      if ( homingFeedRateState != lastHomingFeedRateState )	forceRedraw = true;
+  
+--- 5351,5362 ----
+  
+  void HomingFeedRatesMode::update(LiquidCrystal& lcd, bool forceRedraw)
+  {
+!     const static unsigned char PROGMEM message1x[] = "X Home Feedrate:";
+!     const static unsigned char PROGMEM message1y[] = "Y Home Feedrate:";
+!     const static unsigned char PROGMEM message1z[] = "Z Home Feedrate:";
+!     const static unsigned char PROGMEM message4[]  = "Up/Dn/Ent to Set";
+!     const static unsigned char PROGMEM blank[]     = " ";
+!     const static unsigned char PROGMEM mm[]        = "mm/min ";
+  
+      if ( homingFeedRateState != lastHomingFeedRateState )	forceRedraw = true;
+  
+diff -c -r '-x.*' G3Firmware34/firmware/src/shared/MoodLightController.cc G3Firmware34.patched/firmware/src/shared/MoodLightController.cc
+*** G3Firmware34/firmware/src/shared/MoodLightController.cc	2012-05-21 20:39:21.638721473 -0400
+--- G3Firmware34.patched/firmware/src/shared/MoodLightController.cc	2012-05-21 18:29:40.944139111 -0400
+***************
+*** 61,118 ****
+  
+  //There has to be a better way, however PROGMEM precludes it
+  
+! const static PROGMEM prog_uchar script0 [] = "Bot Status";
+! const static PROGMEM prog_uchar script1 [] = "Custom RGB";
+! const static PROGMEM prog_uchar script2 [] = "Off";
+! const static PROGMEM prog_uchar script3 [] = "White";
+! const static PROGMEM prog_uchar script4 [] = "Red";
+! const static PROGMEM prog_uchar script5 [] = "Green";
+! const static PROGMEM prog_uchar script6 [] = "Blue";
+! const static PROGMEM prog_uchar script7 [] = "Cyan";
+! const static PROGMEM prog_uchar script8 [] = "Magenta";
+! const static PROGMEM prog_uchar script9 [] = "Yellow";
+! const static PROGMEM prog_uchar script10[] = "Purple";
+! const static PROGMEM prog_uchar script11[] = "Orange";
+! const static PROGMEM prog_uchar script12[] = "Almond";
+! const static PROGMEM prog_uchar script13[] = "Peach Puff";
+! const static PROGMEM prog_uchar script14[] = "Mint Cream";
+! const static PROGMEM prog_uchar script15[] = "Alice Blue";
+! const static PROGMEM prog_uchar script16[] = "Lavender";
+! const static PROGMEM prog_uchar script17[] = "Misty Rose";
+! const static PROGMEM prog_uchar script18[] = "Slate Gray";
+! const static PROGMEM prog_uchar script19[] = "Gray";
+! const static PROGMEM prog_uchar script20[] = "Light Gray";
+! const static PROGMEM prog_uchar script21[] = "MidnghtBlu";
+! const static PROGMEM prog_uchar script22[] = "DeepSkyBlu";
+! const static PROGMEM prog_uchar script23[] = "OliveGreen";
+! const static PROGMEM prog_uchar script24[] = "ForstGreen";
+! const static PROGMEM prog_uchar script25[] = "Gold";
+! const static PROGMEM prog_uchar script26[] = "Hot Pink";
+! const static PROGMEM prog_uchar script27[] = "Linen";
+! const static PROGMEM prog_uchar script100[] = "WRGB";
+! const static PROGMEM prog_uchar script101[] = "RGB";
+! const static PROGMEM prog_uchar script102[] = "WhiteFlash";
+! const static PROGMEM prog_uchar script103[] = "Red Flash";
+! const static PROGMEM prog_uchar script104[] = "GreenFlash";
+! const static PROGMEM prog_uchar script105[] = "Blue Flash";
+! const static PROGMEM prog_uchar script106[] = "Cyan Flash";
+! const static PROGMEM prog_uchar script107[] = "MgntaFlash";
+! const static PROGMEM prog_uchar script108[] = "Yell Flash";
+! const static PROGMEM prog_uchar script109[] = "Black";
+! const static PROGMEM prog_uchar script110[] = "Hue Cycle";
+! const static PROGMEM prog_uchar script111[] = "Mood Light";
+! const static PROGMEM prog_uchar script112[] = "Candle";
+! const static PROGMEM prog_uchar script113[] = "Water";
+! const static PROGMEM prog_uchar script114[] = "Old Neon";
+! const static PROGMEM prog_uchar script115[] = "Seasons";
+! const static PROGMEM prog_uchar script116[] = "Thundrstrm";
+! const static PROGMEM prog_uchar script117[] = "Stop Light";
+! const static PROGMEM prog_uchar script118[] = "S. O. S.";
+! const static PROGMEM prog_uchar script_unknown[] = "UNKNOWN";
+  
+  //There has to be a better way, however PROGMEM precludes it
+  
+! const PROGMEM prog_uchar *MoodLightController::scriptIdToStr(uint8_t scriptId)
+  {
+      switch(scriptId)
+      {
+--- 61,118 ----
+  
+  //There has to be a better way, however PROGMEM precludes it
+  
+! const static unsigned char PROGMEM script0 [] = "Bot Status";
+! const static unsigned char PROGMEM script1 [] = "Custom RGB";
+! const static unsigned char PROGMEM script2 [] = "Off";
+! const static unsigned char PROGMEM script3 [] = "White";
+! const static unsigned char PROGMEM script4 [] = "Red";
+! const static unsigned char PROGMEM script5 [] = "Green";
+! const static unsigned char PROGMEM script6 [] = "Blue";
+! const static unsigned char PROGMEM script7 [] = "Cyan";
+! const static unsigned char PROGMEM script8 [] = "Magenta";
+! const static unsigned char PROGMEM script9 [] = "Yellow";
+! const static unsigned char PROGMEM script10[] = "Purple";
+! const static unsigned char PROGMEM script11[] = "Orange";
+! const static unsigned char PROGMEM script12[] = "Almond";
+! const static unsigned char PROGMEM script13[] = "Peach Puff";
+! const static unsigned char PROGMEM script14[] = "Mint Cream";
+! const static unsigned char PROGMEM script15[] = "Alice Blue";
+! const static unsigned char PROGMEM script16[] = "Lavender";
+! const static unsigned char PROGMEM script17[] = "Misty Rose";
+! const static unsigned char PROGMEM script18[] = "Slate Gray";
+! const static unsigned char PROGMEM script19[] = "Gray";
+! const static unsigned char PROGMEM script20[] = "Light Gray";
+! const static unsigned char PROGMEM script21[] = "MidnghtBlu";
+! const static unsigned char PROGMEM script22[] = "DeepSkyBlu";
+! const static unsigned char PROGMEM script23[] = "OliveGreen";
+! const static unsigned char PROGMEM script24[] = "ForstGreen";
+! const static unsigned char PROGMEM script25[] = "Gold";
+! const static unsigned char PROGMEM script26[] = "Hot Pink";
+! const static unsigned char PROGMEM script27[] = "Linen";
+! const static unsigned char PROGMEM script100[] = "WRGB";
+! const static unsigned char PROGMEM script101[] = "RGB";
+! const static unsigned char PROGMEM script102[] = "WhiteFlash";
+! const static unsigned char PROGMEM script103[] = "Red Flash";
+! const static unsigned char PROGMEM script104[] = "GreenFlash";
+! const static unsigned char PROGMEM script105[] = "Blue Flash";
+! const static unsigned char PROGMEM script106[] = "Cyan Flash";
+! const static unsigned char PROGMEM script107[] = "MgntaFlash";
+! const static unsigned char PROGMEM script108[] = "Yell Flash";
+! const static unsigned char PROGMEM script109[] = "Black";
+! const static unsigned char PROGMEM script110[] = "Hue Cycle";
+! const static unsigned char PROGMEM script111[] = "Mood Light";
+! const static unsigned char PROGMEM script112[] = "Candle";
+! const static unsigned char PROGMEM script113[] = "Water";
+! const static unsigned char PROGMEM script114[] = "Old Neon";
+! const static unsigned char PROGMEM script115[] = "Seasons";
+! const static unsigned char PROGMEM script116[] = "Thundrstrm";
+! const static unsigned char PROGMEM script117[] = "Stop Light";
+! const static unsigned char PROGMEM script118[] = "S. O. S.";
+! const static unsigned char PROGMEM script_unknown[] = "UNKNOWN";
+  
+  //There has to be a better way, however PROGMEM precludes it
+  
+! const unsigned char PROGMEM *MoodLightController::scriptIdToStr(uint8_t scriptId)
+  {
+      switch(scriptId)
+      {
+diff -c -r '-x.*' G3Firmware34/firmware/src/shared/MoodLightController.hh G3Firmware34.patched/firmware/src/shared/MoodLightController.hh
+*** G3Firmware34/firmware/src/shared/MoodLightController.hh	2012-05-21 20:39:21.638721473 -0400
+--- G3Firmware34.patched/firmware/src/shared/MoodLightController.hh	2012-05-21 18:28:02.851652679 -0400
+***************
+*** 43,49 ****
+      MoodLightController(Pin sda, Pin sdl);
+  
+      //Used for Menu
+!     const PROGMEM prog_uchar *scriptIdToStr(uint8_t scriptId);
+      uint8_t nextScriptId(uint8_t currentScriptId);
+      uint8_t prevScriptId(uint8_t currentScriptId);
+  
+--- 43,49 ----
+      MoodLightController(Pin sda, Pin sdl);
+  
+      //Used for Menu
+!     const unsigned char * PROGMEM scriptIdToStr(uint8_t scriptId);
+      uint8_t nextScriptId(uint8_t currentScriptId);
+      uint8_t prevScriptId(uint8_t currentScriptId);
+  
