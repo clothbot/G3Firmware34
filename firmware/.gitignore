@@ -1,3 +1,6 @@
 .sconsign.dblite
 build
 *.map
+html
+build_all_output
+
